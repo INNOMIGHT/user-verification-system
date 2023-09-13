@@ -1,48 +1,27 @@
 package com.mini_assignment.user_verification.service;
 
-import java.text.ParseException;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-import javax.management.RuntimeErrorException;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.reactive.function.client.WebClient;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mini_assignment.user_verification.dto.CountryDTO;
-import com.mini_assignment.user_verification.dto.ErrorResponse;
-import com.mini_assignment.user_verification.dto.ExternalGenderDTO;
-import com.mini_assignment.user_verification.dto.NationalityResponse;
-import com.mini_assignment.user_verification.dto.PageInfo;
-import com.mini_assignment.user_verification.dto.RandomUserDTO;
+import com.mini_assignment.user_verification.dto.*;
 import com.mini_assignment.user_verification.dto.RandomUserDTO.Result;
-import com.mini_assignment.user_verification.dto.SizeDTO;
-import com.mini_assignment.user_verification.dto.UnverifiedUserDTO;
-import com.mini_assignment.user_verification.dto.UserGetQuery;
-import com.mini_assignment.user_verification.dto.UsersGetResponse;
 import com.mini_assignment.user_verification.entity.User;
 import com.mini_assignment.user_verification.entity.User.AgeComparator;
 import com.mini_assignment.user_verification.entity.User.NameComparator;
 import com.mini_assignment.user_verification.repository.UserRepository;
-import com.mini_assignment.user_verification.validator.Validator;
-import com.mini_assignment.user_verification.validator.ValidatorFactory;
-import com.mini_assignment.user_verification.webclient.WebClientConfig;
-
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
+
+import javax.management.RuntimeErrorException;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 
 @Service

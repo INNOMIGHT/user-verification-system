@@ -1,31 +1,17 @@
 package com.mini_assignment.user_verification.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
-
+import com.mini_assignment.user_verification.dto.*;
+import com.mini_assignment.user_verification.entity.User;
+import com.mini_assignment.user_verification.service.UserService;
 import com.mini_assignment.user_verification.validator.Validator;
 import com.mini_assignment.user_verification.validator.ValidatorFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.mini_assignment.user_verification.dto.ErrorResponse;
-import com.mini_assignment.user_verification.dto.ExternalGenderDTO;
-import com.mini_assignment.user_verification.dto.NationalityResponse;
-import com.mini_assignment.user_verification.dto.SizeDTO;
-import com.mini_assignment.user_verification.dto.UnverifiedUserDTO;
-import com.mini_assignment.user_verification.dto.UserGetQuery;
-import com.mini_assignment.user_verification.dto.UsersGetResponse;
-import com.mini_assignment.user_verification.entity.User;
-import com.mini_assignment.user_verification.service.UserService;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 
 @RestController

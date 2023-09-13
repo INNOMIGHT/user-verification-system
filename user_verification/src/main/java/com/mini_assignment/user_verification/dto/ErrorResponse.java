@@ -1,8 +1,8 @@
 package com.mini_assignment.user_verification.dto;
 
-import java.util.Date;
-
 import org.springframework.web.reactive.result.method.annotation.ResponseEntityExceptionHandler;
+
+import java.util.Date;
 
 public class ErrorResponse extends ResponseEntityExceptionHandler {
 
