@@ -1,0 +1,168 @@
+package com.mini_assignment.user_verification.service;
+
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import javax.management.RuntimeErrorException;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mini_assignment.user_verification.dto.CountryDTO;
+import com.mini_assignment.user_verification.dto.ExternalGenderDTO;
+import com.mini_assignment.user_verification.dto.NationalityResponse;
+import com.mini_assignment.user_verification.dto.RandomUserDTO;
+import com.mini_assignment.user_verification.dto.RandomUserDTO.Result;
+import com.mini_assignment.user_verification.dto.SizeDTO;
+import com.mini_assignment.user_verification.dto.UnverifiedUserDTO;
+import com.mini_assignment.user_verification.entity.User;
+import com.mini_assignment.user_verification.webclient.WebClientConfig;
+
+import reactor.core.publisher.Mono;
+
+
+@Service
+public class UserService {
+	
+	private static CountryDTO countryListDTO = null;
+	private static RandomUserDTO randomUserData = null;
+	private static ExternalGenderDTO externalGender = null;
+	private static List<UnverifiedUserDTO> unverifiedUsersList = new ArrayList<UnverifiedUserDTO>();
+
+	@Autowired
+	private WebClientConfig webClientConfig;
+	
+	private final ExecutorService executorService = Executors.newFixedThreadPool(2); 
+
+    @Value("https://randomuser.me/api/")
+    private String api1Url;
+    @Value("https://api.naƟonalize.io/?name=Rishaan")
+    private String api2Url;
+    @Value("https://api.genderize.io/?name=Rishaan")
+    private String api3Url;
+	
+	
+	public List<UnverifiedUserDTO> getRandomUser(Integer size) {
+		
+		Mono<String> responseMono = webClientConfig.webClientForApi1()
+                .get()
+                .uri("/?results="+size)
+                .retrieve()
+                .bodyToMono(String.class);
+
+        String randomUser = responseMono.block();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            RandomUserDTO randomUserDTO = objectMapper.readValue(randomUser, RandomUserDTO.class);
+
+            // Assuming there's only one result in the "results" array
+            RandomUserDTO.Result result = randomUserDTO.getResults().get(0);
+            randomUserData = randomUserDTO;
+        }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+        
+        
+        for(var i=0; i<size; i++) {
+        	Result newRandomUser = randomUserData.getResults().get(i);
+        	UnverifiedUserDTO newUnverifiedUser = new UnverifiedUserDTO();
+        	newUnverifiedUser.setName(newRandomUser.getFullName());
+        	newUnverifiedUser.setAge(newRandomUser.getAge());
+        	newUnverifiedUser.setGender(newRandomUser.getGender());
+        	newUnverifiedUser.setNationality(newRandomUser.getNationality());
+        	try {
+				newUnverifiedUser.setDob(newRandomUser.getDobAsDate());
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        	unverifiedUsersList.add(newUnverifiedUser);
+        }
+		return unverifiedUsersList;
+
+	}
+
+	public CompletableFuture<NationalityResponse> getNationalityAsync(String name) {
+		
+		
+        return CompletableFuture.supplyAsync(() -> {
+            // Use webClientForApi2 to make API calls to the second API
+            String nationality = webClientConfig.webClientForApi2()
+                    .get()
+                    .uri("/?name=" + name.split(" ")[0])
+                    .retrieve()
+                    .bodyToMono(String.class)
+                    .block(); // Block to get the result synchronously
+            ObjectMapper objectMapper = new ObjectMapper();
+            System.out.println(nationality);
+            try {
+            	NationalityResponse nationalityResponse = objectMapper.readValue(nationality, NationalityResponse.class);
+            	return nationalityResponse;
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new RuntimeErrorException(null);
+            }           
+        });
+    }
+
+    public CompletableFuture<String> getGenderAsync(String name) {
+        return CompletableFuture.supplyAsync(() -> {
+            // Use webClientForApi3 to make API calls to the third API
+            String gender = webClientConfig.webClientForApi3()
+                    .get()
+                    .uri("/?name=" + name.split(" ")[0])
+                    .retrieve()
+                    .bodyToMono(String.class)
+                    .block(); // Block to get the result synchronously
+            
+            ObjectMapper objectMapper = new ObjectMapper();
+
+            try {
+                ExternalGenderDTO genderDTO = objectMapper.readValue(gender, ExternalGenderDTO.class);
+                externalGender = genderDTO;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }           
+
+
+            // Parse the response and return the gender
+            // Implement the logic to extract the gender from the response
+
+            return externalGender.gender;
+        });
+    }
+
+    // Other methods for verification and saving data
+
+
+    public User verifyUser(UnverifiedUserDTO userToBeVerified, CompletableFuture<List<String>> nationality, CompletableFuture<String> gender) {
+		List<String> nationalitiesToBeVerified = nationality.join();
+		String genderToBeVerified = gender.join();
+		
+		if(nationalitiesToBeVerified.contains(userToBeVerified.getNationality()) && userToBeVerified.getGender().equals(genderToBeVerified)) {
+			User user = new User(userToBeVerified.getName(), userToBeVerified.getAge(), userToBeVerified.getGender(), userToBeVerified.getDob(), userToBeVerified.getGender(), "VERIFIED");
+			return user;
+		} else {
+			User user = new User(userToBeVerified.getName(), userToBeVerified.getAge(), userToBeVerified.getGender(), userToBeVerified.getDob(), userToBeVerified.getGender(), "TO_BE_VERIFIED");
+			return user;
+		}
+
+        
+    }
+//
+//    public User saveUser(User user) {
+//        // Set verification_status and date_created
+//        // Save the user data to the database using UserRepository
+//        // Return the saved User object
+//    }
+}

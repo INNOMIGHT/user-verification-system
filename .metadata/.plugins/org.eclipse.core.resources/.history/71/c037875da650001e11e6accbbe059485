@@ -1,0 +1,16 @@
+package com.mini_assignment.user_verification.validator;
+
+public class NumericValidator implements Validator {
+
+	@Override
+    public boolean validate(String input) {
+      
+        try {
+            Integer.parseInt(input);
+            return true;
+        } catch (NumberFormatException e) {
+            return false; 
+        }
+    }
+
+}

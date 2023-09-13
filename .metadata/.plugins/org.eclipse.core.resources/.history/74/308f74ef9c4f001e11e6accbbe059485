@@ -1,0 +1,94 @@
+package com.mini_assignment.user_verification.dto;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.List;
+
+public class RandomUserDTO {
+    private List<Result> results;
+
+    public List<Result> getResults() {
+        return results;
+    }
+
+    public void setResults(List<Result> results) {
+        this.results = results;
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class Result {
+        @JsonProperty("name")
+        private Name name;  // Map the "name" field to the "name" property
+        @JsonProperty("gender")
+        private String gender; // Map the "gender" field to the "gender" property
+        @JsonProperty("dob")
+        private String dob; // Map the "dob" field to the "dob" property
+        @JsonProperty("nat")
+        private String nationality; // Map the "nat" field to the "nationality" property
+
+        public Name getName() {
+            return name;
+        }
+
+        public void setName(Name name) {
+            this.name = name;
+        }
+
+        public String getGender() {
+            return gender;
+        }
+
+        public void setGender(String gender) {
+            this.gender = gender;
+        }
+
+        public String getDob() {
+            return dob;
+        }
+
+        public void setDob(String dob) {
+            this.dob = dob;
+        }
+
+        public String getNationality() {
+            return nationality;
+        }
+
+        public void setNationality(String nationality) {
+            this.nationality = nationality;
+        }
+    }
+
+    public static class Name {
+        @JsonProperty("first")
+        private String firstName; // Map the "first" field to the "firstName" property
+        @JsonProperty("last")
+        private String lastName;  // Map the "last" field to the "lastName" property
+        @JsonProperty("title")
+        private String title;  // Map the "title" field to the "title" property
+
+        public String getFirstName() {
+            return firstName;
+        }
+
+        public void setFirstName(String firstName) {
+            this.firstName = firstName;
+        }
+
+        public String getLastName() {
+            return lastName;
+        }
+
+        public void setLastName(String lastName) {
+            this.lastName = lastName;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public void setTitle(String title) {
+            this.title = title;
+        }
+    }
+}

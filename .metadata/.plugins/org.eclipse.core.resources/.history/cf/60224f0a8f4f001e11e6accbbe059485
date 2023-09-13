@@ -1,0 +1,37 @@
+package com.mini_assignment.user_verification.dto;
+
+import java.util.List;
+
+public class RandomUserDTO {
+
+	List<result> results;
+	
+	public class result{
+		Name name;
+		int age;
+		String gender;
+		String dob;
+		String nationality;
+	}
+	
+	public class Name{
+		private String first;
+	    private String last;
+	    private String fullName; 
+	    
+	   
+	    public Name(String first, String last) {
+			super();
+			this.first = first;
+			this.last = last;
+			this.fullName = first + " " + last;
+		}
+
+		public String getFullName() {
+	        return fullName;
+	    }
+	}
+	
+
+
+}

@@ -1,0 +1,11 @@
+package com.mini_assignment.user_verification.validator;
+
+public class EnglishAlphabetsValidator implements Validator {
+	
+	@Override
+    public boolean validate(String input) {
+        // Check if the input contains only English alphabets
+        return input.matches("^[a-zA-Z]*$");
+    }
+	
+}

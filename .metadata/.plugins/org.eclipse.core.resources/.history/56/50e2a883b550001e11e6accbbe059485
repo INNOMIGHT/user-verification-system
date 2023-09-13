@@ -1,0 +1,17 @@
+package com.mini_assignment.user_verification.service;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.mini_assignment.user_verification.repository.UserRepository;
+
+public class UserServiceTest {
+
+	@Test
+	public void itShouldReturnSortedListOfUsersBasedOnAgeAndSortOrderEven(){
+//		
+//		UserService userService = new UserService();
+//		
+//		userService.getUsers(G)
+	}
+}

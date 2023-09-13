@@ -1,0 +1,43 @@
+package com.mini_assignment.user_verification.dto;
+
+import java.util.Date;
+
+public class ErrorResponse {
+	
+	private String errorMessage;
+	private Integer errorCode;
+	private Date timestamp;
+	
+	public ErrorResponse(String errorMessage, Integer errorCode) {
+		super();
+		this.errorMessage = errorMessage;
+		this.errorCode = errorCode;
+		this.timestamp = new Date();
+	}
+	public ErrorResponse() {
+		super();
+	}
+	
+	
+	public String getErrorMessage() {
+		return errorMessage;
+	}
+	public void setErrorMessage(String errorMessage) {
+		this.errorMessage = errorMessage;
+	}
+	public Integer getErrorCode() {
+		return errorCode;
+	}
+	public void setErrorCode(Integer errorCode) {
+		this.errorCode = errorCode;
+	}
+	public Date getTimestamp() {
+		return timestamp;
+	}
+	public void setTimestamp(Date timestamp) {
+		this.timestamp = timestamp;
+	}
+	
+	
+
+}

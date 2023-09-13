@@ -1,0 +1,5 @@
+package com.mini_assignment.user_verification.dto;
+
+public class NationalityResponse {
+
+}

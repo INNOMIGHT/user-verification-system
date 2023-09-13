@@ -1,0 +1,16 @@
+package com.mini_assignment.user_verification.dto;
+
+import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.mini_assignment.user_verification.dto.RandomUserDTO.Dob;
+import com.mini_assignment.user_verification.dto.RandomUserDTO.Name;
+
+public class UnverifiedUserDTO {
+
+	private String name;
+    private String gender;
+    private Date dob; // Use a separate DTO class for "dob"
+    private String nationality;
+    private int age;
+}

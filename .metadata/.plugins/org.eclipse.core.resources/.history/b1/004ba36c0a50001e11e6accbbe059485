@@ -1,0 +1,19 @@
+package com.mini_assignment.user_verification.dto;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class CountryDTO {
+    private List<String> countryIds;
+
+    public List<String> getCountryIds() {
+        return countryIds;
+    }
+
+    public void setCountryIds(List<String> countryIds) {
+        this.countryIds = countryIds;
+    }
+}
+

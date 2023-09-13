@@ -1,0 +1,101 @@
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.List;
+
+public class RandomUserDTO {
+    private List<Result> results;
+
+    public List<Result> getResults() {
+        return results;
+    }
+
+    public void setResults(List<Result> results) {
+        this.results = results;
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class Result {
+        // Map specific JSON fields to DTO properties using @JsonProperty
+        @JsonProperty("name")
+        private Name fullName;  // Map the "name" field to the "fullName" property
+        @JsonProperty("gender")
+        private String userGender; // Map the "gender" field to the "userGender" property
+        
+        // Ignore the "location" field in JSON
+        @JsonIgnore
+        private Object location;
+        
+        @JsonProperty("dob")
+        private Dob dob; // Map the "dob" field to the "dob" property
+
+        public Name getFullName() {
+            return fullName;
+        }
+
+        public void setFullName(Name fullName) {
+            this.fullName = fullName;
+        }
+
+        public String getUserGender() {
+            return userGender;
+        }
+
+        public void setUserGender(String userGender) {
+            this.userGender = userGender;
+        }
+        
+        public Object getLocation() {
+            return location;
+        }
+
+        public void setLocation(Object location) {
+            this.location = location;
+        }
+
+        public Dob getDob() {
+            return dob;
+        }
+
+        public void setDob(Dob dob) {
+            this.dob = dob;
+        }
+    }
+
+    public static class Name {
+        @JsonProperty("first")
+        private String firstName; // Map the "first" field to the "firstName" property
+        @JsonProperty("last")
+        private String lastName;  // Map the "last" field to the "lastName" property
+
+        public String getFirstName() {
+            return firstName;
+        }
+
+        public void setFirstName(String firstName) {
+            this.firstName = firstName;
+        }
+
+        public String getLastName() {
+            return lastName;
+        }
+
+        public void setLastName(String lastName) {
+            this.lastName = lastName;
+        }
+    }
+    
+    public static class Dob {
+        @JsonProperty("age")
+        private int userAge; // Map the "age" field to the "userAge" property
+
+        public int getUserAge() {
+            return userAge;
+        }
+
+        public void setUserAge(int userAge) {
+            this.userAge = userAge;
+        }
+    }
+}

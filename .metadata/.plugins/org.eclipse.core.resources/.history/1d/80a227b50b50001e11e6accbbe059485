@@ -1,0 +1,45 @@
+package com.mini_assignment.user_verification.controller;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.mini_assignment.user_verification.dto.NationalityResponse;
+import com.mini_assignment.user_verification.dto.SizeDTO;
+import com.mini_assignment.user_verification.dto.UnverifiedUserDTO;
+import com.mini_assignment.user_verification.entity.User;
+import com.mini_assignment.user_verification.service.UserService;
+
+
+@RestController
+@RequestMapping
+public class UserController {
+
+	@Autowired
+	private UserService userService;
+	
+	@PostMapping("/users")
+    public ResponseEntity<NationalityResponse> getRandomUser(@RequestBody SizeDTO size) {
+        List<UnverifiedUserDTO> randomUsersList = userService.getRandomUser(size.getSize());
+        List<User> usersVerified = new ArrayList<>();
+        NationalityResponse checkingData = new NationalityResponse();
+        for(var randomUser: randomUsersList) {
+        	
+        	CompletableFuture<NationalityResponse> externalNationalities = userService.getNationalityAsync(randomUser.getName());
+        	CompletableFuture<String> externalGender = userService.getGenderAsync(randomUser.getName());
+//        	usersVerified.add(userService.verifyUser(randomUser, externalNationalities, externalGender));
+        	
+        }
+        
+        return ResponseEntity.ok(checkingData);
+    }
+	
+}

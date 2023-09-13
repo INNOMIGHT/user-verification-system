@@ -1,0 +1,13 @@
+package com.mini_assignment.user_verification.validator;
+
+public class ValidatorFactory {
+	
+	public static Validator createValidator(String parameterType) {
+        if ("limit".equalsIgnoreCase(parameterType) || "offset".equalsIgnoreCase(parameterType)) {
+            return NumericValidator.getInstance();
+        } else {
+            return NumericValidator.getInstance();
+        }
+    }
+
+}

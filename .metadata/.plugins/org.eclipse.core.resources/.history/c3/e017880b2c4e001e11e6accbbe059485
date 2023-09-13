@@ -1,0 +1,15 @@
+package com.mini_assignment.user_verification.dto;
+
+public class PostPayload {
+	int size;
+
+	public int getSize() {
+		return size;
+	}
+
+	public void setSize(int size) {
+		this.size = size;
+	}
+	
+	
+}

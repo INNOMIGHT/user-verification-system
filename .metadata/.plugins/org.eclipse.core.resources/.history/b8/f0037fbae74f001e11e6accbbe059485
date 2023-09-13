@@ -1,0 +1,25 @@
+package com.mini_assignment.user_verification.dto;
+
+public class ExternalGenderDTO {
+
+	public String gender;
+
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
+	public ExternalGenderDTO(String gender) {
+		super();
+		this.gender = gender;
+	}
+
+	public ExternalGenderDTO() {
+		super();
+	}
+	
+	
+}

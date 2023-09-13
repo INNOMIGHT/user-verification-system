@@ -1,0 +1,134 @@
+package com.mini_assignment.user_verification.service;
+
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mini_assignment.user_verification.dto.RandomUserDTO;
+import com.mini_assignment.user_verification.dto.RandomUserDTO.Result;
+import com.mini_assignment.user_verification.dto.SizeDTO;
+import com.mini_assignment.user_verification.dto.UnverifiedUserDTO;
+import com.mini_assignment.user_verification.entity.User;
+import com.mini_assignment.user_verification.webclient.WebClientConfig;
+
+import reactor.core.publisher.Mono;
+
+
+@Service
+public class UserService {
+	
+	private static RandomUserDTO randomUserData = null;
+	private static List<UnverifiedUserDTO> unverifiedUsersList = new ArrayList<UnverifiedUserDTO>();
+
+	@Autowired
+	private WebClientConfig webClientConfig;
+	
+	private final ExecutorService executorService = Executors.newFixedThreadPool(2); 
+
+    @Value("https://randomuser.me/api/")
+    private String api1Url;
+    @Value("https://api.naƟonalize.io/?name=Rishaan")
+    private String api2Url;
+    @Value("https://api.genderize.io/?name=Rishaan")
+    private String api3Url;
+	
+	
+	public Object getRandomUser(SizeDTO results) {
+		
+		Mono<String> responseMono = webClientConfig.webClientForApi1()
+                .get()
+                .uri("/?results="+results)
+                .retrieve()
+                .bodyToMono(String.class);
+
+        String randomUser = responseMono.block();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            RandomUserDTO randomUserDTO = objectMapper.readValue(randomUser, RandomUserDTO.class);
+
+            // Assuming there's only one result in the "results" array
+            RandomUserDTO.Result result = randomUserDTO.getResults().get(0);
+            randomUserData = randomUserDTO;
+        }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+        
+        
+        for(var i=0; i<results.getSize(); i++) {
+        	Result newRandomUser = randomUserData.getResults().get(i);
+        	UnverifiedUserDTO newUnverifiedUser = new UnverifiedUserDTO();
+        	newUnverifiedUser.setName(newRandomUser.getFullName());
+        	newUnverifiedUser.setAge(newRandomUser.getAge());
+        	newUnverifiedUser.setGender(newRandomUser.getGender());
+        	newUnverifiedUser.setNationality(newRandomUser.getNationality());
+        	try {
+				newUnverifiedUser.setDob(newRandomUser.getDobAsDate());
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        	unverifiedUsersList.add(newUnverifiedUser);
+        }
+		return unverifiedUsersList;
+
+	}
+
+	public CompletableFuture<String> getNationalityAsync(String name) {
+        return CompletableFuture.supplyAsync(() -> {
+            // Use webClientForApi2 to make API calls to the second API
+            String nationality = webClientConfig.webClientForApi2()
+                    .get()
+                    .uri("/nationalize?name=" + name)
+                    .retrieve()
+                    .bodyToMono(String.class)
+                    .block(); // Block to get the result synchronously
+
+            // Parse the response and return the nationality
+            // Implement the logic to extract the nationality from the response
+
+            return nationality;
+        });
+    }
+
+    public CompletableFuture<String> getGenderAsync(String name) {
+        return CompletableFuture.supplyAsync(() -> {
+            // Use webClientForApi3 to make API calls to the third API
+            String gender = webClientConfig.webClientForApi3()
+                    .get()
+                    .uri("/genderize?name=" + name)
+                    .retrieve()
+                    .bodyToMono(String.class)
+                    .block(); // Block to get the result synchronously
+
+            // Parse the response and return the gender
+            // Implement the logic to extract the gender from the response
+
+            return gender;
+        });
+    }
+
+    // Other methods for verification and saving data
+
+
+//    public String verifyUser(User user, String nationality, String gender) {
+//        // Implement Step 4 logic to verify the user and return "VERIFIED" or "TO_BE_VERIFIED"
+//    }
+//
+//    public User saveUser(User user) {
+//        // Set verification_status and date_created
+//        // Save the user data to the database using UserRepository
+//        // Return the saved User object
+//    }
+}
