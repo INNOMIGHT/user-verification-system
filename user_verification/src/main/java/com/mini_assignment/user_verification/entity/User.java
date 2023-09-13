@@ -3,6 +3,7 @@ package com.mini_assignment.user_verification.entity;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.Objects;
 
 import com.mini_assignment.user_verification.dto.UserGetQuery;
 
@@ -25,11 +26,11 @@ public class User{
     private String verification_status;
     private LocalDateTime date_created;
     private LocalDateTime date_modified;
-    
+
     public User() {
-    	
+
     }
-    
+
 	public User(String name, int age, String gender, Date dob, String nationality,
 			String verification_status) {
 		this.name = name;
@@ -41,8 +42,8 @@ public class User{
 		this.date_created = LocalDateTime.now();
 		this.date_modified = LocalDateTime.now();
 	}
-	
-	
+
+
 	public Long getUser_id() {
 		return user_id;
 	}
@@ -98,6 +99,34 @@ public class User{
 		this.date_modified = date_modified;
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		User user = (User) o;
+		return age == user.age && user_id.equals(user.user_id) && name.equals(user.name) && gender.equals(user.gender) && dob.equals(user.dob) && nationality.equals(user.nationality) && verification_status.equals(user.verification_status) && date_created.equals(user.date_created) && date_modified.equals(user.date_modified);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(user_id, name, age, gender, dob, nationality, verification_status, date_created, date_modified);
+	}
+
+	@Override
+	public String toString() {
+		return "User{" +
+				"user_id=" + user_id +
+				", name='" + name + '\'' +
+				", age=" + age +
+				", gender='" + gender + '\'' +
+				", dob=" + dob +
+				", nationality='" + nationality + '\'' +
+				", verification_status='" + verification_status + '\'' +
+				", date_created=" + date_created +
+				", date_modified=" + date_modified +
+				'}';
+	}
+
 	public static final class AgeComparator implements Comparator<User> {
 		private final UserGetQuery userGetQuery;
 
@@ -109,7 +138,7 @@ public class User{
 		public int compare(User o1, User o2) {
 			if (userGetQuery.getSortOrder().equals("even")) {
 				// TODO Auto-generated method stub
-				
+
 				if (o1.getAge() % 2 == 0 && o2.getAge() % 2 != 0) {
 					return -1;
 				}
@@ -117,10 +146,10 @@ public class User{
 					return 1;
 				}
 				return 0;
-			} 
+			}
 			else {
 				// TODO Auto-generated method stub
-				
+
 				if (o1.getAge() % 2 == 0 && o2.getAge() % 2 != 0) {
 					return 1;
 				}
@@ -131,7 +160,7 @@ public class User{
 			return 0;
 		}
 	}
-	
+
 	public static final class NameComparator implements Comparator<User> {
 		private final UserGetQuery userGetQuery;
 
@@ -169,7 +198,7 @@ public class User{
 		}
 	}
 
-	
-    
+
+
 }
 

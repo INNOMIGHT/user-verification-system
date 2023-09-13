@@ -5,15 +5,12 @@ import java.util.Date;
 import org.springframework.web.reactive.result.method.annotation.ResponseEntityExceptionHandler;
 
 public class ErrorResponse extends ResponseEntityExceptionHandler {
-	
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = -3985143863391705694L;
 	private String errorMessage;
 	private int errorCode;
 	private Date timestamp;
-	
+
 	public ErrorResponse(String errorMessage, int errorCode) {
 		super();
 		this.errorMessage = errorMessage;
@@ -23,8 +20,8 @@ public class ErrorResponse extends ResponseEntityExceptionHandler {
 	public ErrorResponse() {
 		super();
 	}
-	
-	
+
+
 	public String getErrorMessage() {
 		return errorMessage;
 	}
@@ -43,7 +40,7 @@ public class ErrorResponse extends ResponseEntityExceptionHandler {
 	public void setTimestamp(Date timestamp) {
 		this.timestamp = timestamp;
 	}
-	
-	
+
+
 
 }
