@@ -1,13 +1,13 @@
 package com.mini_assignment.user_verification.validator;
 
-public class NumericValidator implements Validator {
-	
+class NumericValidator implements Validator {
+
 	private static NumericValidator numericValidator;
-	
-	private NumericValidator() {
-		
+
+	NumericValidator() {
+
 	}
-	
+
 	public static NumericValidator getInstance() {
 		if (numericValidator == null) {
 			numericValidator = new NumericValidator();
@@ -17,12 +17,12 @@ public class NumericValidator implements Validator {
 
 	@Override
     public boolean validate(String input) {
-      
+
         try {
             Integer.parseInt(input);
             return true;
         } catch (NumberFormatException e) {
-            return false; 
+            return false;
         }
     }
 

@@ -1,16 +1,15 @@
 package com.mini_assignment.user_verification.entity;
 
-import java.time.LocalDateTime;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.Objects;
-
 import com.mini_assignment.user_verification.dto.UserGetQuery;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+
+import java.time.LocalDateTime;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.Objects;
 
 
 @Entity

@@ -1,21 +1,22 @@
 package com.mini_assignment.user_verification.dto;
-import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.Objects;
+
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CountryDTO {
-	
+
 	@JsonProperty("country_id")
     private String countryId;
 
 	public CountryDTO(String nationality) {
 		this.countryId = nationality;
 	}
-	
-	
+
+
 
 	@Override
 	public int hashCode() {
@@ -51,14 +52,14 @@ public class CountryDTO {
 	public void setCountryId(String countryId) {
 		this.countryId = countryId;
 	}
-	
-	
+
+
 
 	public static CountryDTO from(String nationality) {
 		// TODO Auto-generated method stub
 		return new CountryDTO(nationality);
 	}
 
-    
+
 }
 

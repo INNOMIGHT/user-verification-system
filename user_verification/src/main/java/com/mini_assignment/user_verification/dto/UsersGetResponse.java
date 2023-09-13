@@ -1,14 +1,14 @@
 package com.mini_assignment.user_verification.dto;
 
-import java.util.List;
-
 import com.mini_assignment.user_verification.entity.User;
 
+import java.util.List;
+
 public class UsersGetResponse {
-	
+
 	List<User> usersList;
 	PageInfo pageInfo;
-	
+
 	public UsersGetResponse() {
 		super();
 	}
@@ -29,7 +29,7 @@ public class UsersGetResponse {
 	public void setPageInfo(PageInfo pageInfo) {
 		this.pageInfo = pageInfo;
 	}
-	
-	
-	
+
+
+
 }
