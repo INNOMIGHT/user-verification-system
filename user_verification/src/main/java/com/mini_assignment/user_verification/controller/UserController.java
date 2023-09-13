@@ -41,6 +41,10 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<List<User>> getRandomUser(@RequestBody SizeDTO size) {
+        if (size.outOfRange()) {
+            throw new IllegalArgumentException("Size should be in range 1-5");
+        }
+
         List<UnverifiedUserDTO> randomUsersList = userService.getRandomUser(size.getSize());
         List<User> usersVerified = new ArrayList<>();
 

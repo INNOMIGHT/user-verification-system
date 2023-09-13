@@ -20,6 +20,9 @@ public class SizeDTO {
 	public SizeDTO() {
 		super();
 	}
-	
-	
+
+
+	public boolean outOfRange() {
+		return this.size < 1 || this.size > 5;
+	}
 }
