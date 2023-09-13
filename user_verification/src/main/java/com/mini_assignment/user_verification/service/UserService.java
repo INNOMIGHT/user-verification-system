@@ -206,34 +206,8 @@ public class UserService {
         pageInfo.setHasPreviousPage(userGetQuery.getOffset() > 0);
 
 
-        UsersGetResponse usersGetResponse = new UsersGetResponse(users, pageInfo);
-
-        return usersGetResponse;
+        return new UsersGetResponse(users, pageInfo);
 
     }
-
-    public void validateParameters(String sortType, String sortOrder, int limit, int offset) {
-        Validator sortTypeValidator = ValidatorFactory.createValidator("name"); // Use EnglishAlphabetsValidator for sortType
-        Validator sortOrderValidator = ValidatorFactory.createValidator("name"); // Use EnglishAlphabetsValidator for sortOrder
-        Validator limitValidator = ValidatorFactory.createValidator("limit"); // Use NumericValidator for limit
-        Validator offsetValidator = ValidatorFactory.createValidator("offset"); // Use NumericValidator for offset
-
-        if (!sortTypeValidator.validate(sortType)) {
-            throw new IllegalArgumentException("Invalid sortType parameter");
-        }
-
-        if (!sortOrderValidator.validate(sortOrder)) {
-            throw new IllegalArgumentException("Invalid sortOrder parameter");
-        }
-
-        if (!limitValidator.validate(String.valueOf(limit))) {
-            throw new IllegalArgumentException("Invalid limit parameter");
-        }
-
-        if (!offsetValidator.validate(String.valueOf(offset))) {
-            throw new IllegalArgumentException("Invalid offset parameter");
-        }
-    }
-
 
 }
