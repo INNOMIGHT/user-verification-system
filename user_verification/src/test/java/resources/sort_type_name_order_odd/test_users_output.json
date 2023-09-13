@@ -1,0 +1,57 @@
+[
+  {
+    "user_id": 1,
+    "name": "Jacob Carlson",
+    "age": 63,
+    "gender": "male",
+    "dob": "1959-11-06T23:28:29.716+00:00",
+    "nationality": "IE",
+    "verification_status": "TO_BE_VERIFIED",
+    "date_created": "2023-09-11T11:03:31.060678",
+    "date_modified": "2023-09-11T11:03:31.060678"
+  },
+  {
+    "user_id": 4,
+    "name": "Kaya Akay",
+    "age": 41,
+    "gender": "male",
+    "dob": "1982-04-20T21:16:59.737+00:00",
+    "nationality": "TR",
+    "verification_status": "VERIFIED",
+    "date_created": "2023-09-11T12:29:47.258919",
+    "date_modified": "2023-09-11T12:29:47.258919"
+  },
+  {
+    "user_id": 2,
+    "name": "Paul Daniels",
+    "age": 77,
+    "gender": "male",
+    "dob": "1946-04-24T01:47:16.036+00:00",
+    "nationality": "US",
+    "verification_status": "TO_BE_VERIFIED",
+    "date_created": "2023-09-11T11:03:36.965232",
+    "date_modified": "2023-09-11T11:03:36.965232"
+  },
+  {
+    "user_id": 3,
+    "name": "Ruža Majstorović",
+    "age": 42,
+    "gender": "female",
+    "dob": "1981-08-09T08:41:41.281+00:00",
+    "nationality": "RS",
+    "verification_status": "VERIFIED",
+    "date_created": "2023-09-11T11:04:26.867342",
+    "date_modified": "2023-09-11T11:04:26.867342"
+  },
+  {
+    "user_id": 5,
+    "name": "Brittany Fox",
+    "age": 43,
+    "gender": "female",
+    "dob": "1980-08-01T05:40:29.050+00:00",
+    "nationality": "US",
+    "verification_status": "VERIFIED",
+    "date_created": "2023-09-11T20:24:31.228924",
+    "date_modified": "2023-09-11T20:24:31.228924"
+  }
+]

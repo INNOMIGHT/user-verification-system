@@ -1,115 +1,70 @@
 package com.mini_assignment.user_verification.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import com.fasterxml.jackson.core.exc.StreamReadException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DatabindException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.mini_assignment.user_verification.dto.UserGetQuery;
+import com.mini_assignment.user_verification.dto.UsersGetResponse;
+import com.mini_assignment.user_verification.entity.User;
+import com.mini_assignment.user_verification.repository.UserRepository;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.mockito.Mockito;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import org.hamcrest.Matchers;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.web.reactive.function.client.WebClient;
-
-import com.fasterxml.jackson.core.exc.StreamReadException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DatabindException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mini_assignment.user_verification.dto.ErrorResponse;
-import com.mini_assignment.user_verification.dto.UserGetQuery;
-import com.mini_assignment.user_verification.dto.UsersGetResponse;
-import com.mini_assignment.user_verification.entity.User;
-import com.mini_assignment.user_verification.repository.UserRepository;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.*;
 
 public class UserServiceTest {
-	
-	private UserService userService;
+    private static final ObjectMapper objectMapper = new ObjectMapper();
+    private UserRepository userRepository;
+    private Page<User> page;
+    private UserService userService;
 
     @BeforeEach
     public void setUp() {
-    	var randomUserWebClient = Mockito.mock(WebClient.class);
-		var nationalizeWebClient = Mockito.mock(WebClient.class);
-		var genderWebClient = Mockito.mock(WebClient.class);
-		var userRepository = Mockito.mock(UserRepository.class);
+        objectMapper.registerModule(new JavaTimeModule());
+        WebClient randomUserWebClient = mock(WebClient.class);
+        WebClient nationalizeWebClient = mock(WebClient.class);
+        WebClient genderWebClient = mock(WebClient.class);
+        userRepository = mock(UserRepository.class);
+        page = mock(Page.class);
         userService = new UserService(genderWebClient, randomUserWebClient, nationalizeWebClient, userRepository); // Create an instance of your service
     }
 
-	@Test
-	public void itShouldReturnSortedListOfUsersBasedOnAgeAndSortOrderEven() throws StreamReadException, DatabindException, IOException{
-		
-		var randomUserWebClient = Mockito.mock(WebClient.class);
-		var nationalizeWebClient = Mockito.mock(WebClient.class);
-		var genderWebClient = Mockito.mock(WebClient.class);
-		var userRepository = Mockito.mock(UserRepository.class);
-		
-		ObjectMapper objectMapper = new ObjectMapper();
-		List<User> listWithOddAgeFirstTestUsers = objectMapper.readValue(new File("src/test/java/resources/test_users.json"), new TypeReference<List<User>>() {});
-		
-		
-		Page<User> page = new PageImpl(listWithOddAgeFirstTestUsers);
-		List<User> realUsersList = page.toList();
-		
-		
-		
-		UserService userService = new UserService(genderWebClient, randomUserWebClient, nationalizeWebClient, userRepository);
-		UsersGetResponse usersList = userService.getUsers(new UserGetQuery("age", "odd", 5, 0));
-		
-		
-		
-		
-		assertEquals(usersList, realUsersList);
-	}
-	
-	@Test
-	public void itShouldReturnSortedListOfUsersBasedOnAgeAndSortOrderOdd() {
-		
-	}
-	
-	@Test
-	public void itShouldReturnSortedListOfUsersBasedOnNameAndSortOrderEven() {
-		
-	}
-	
-	@Test
-	public void itShouldReturnSortedListOfUsersBasedOnNameAndSortOrderOdd() {
-		
-	}
-	
-	@Test
-	public void itShouldReturnErrorSizeNotValid() {
-		
-	}
-	
-	@Test
-	public void itShouldReturnNumericValidatorError() {
-		
-	}
-	
-	@Test
-	public void itShouldReturnEnglishAlphabetsValidatorError() {
-		
-	}
-	
-	@Test
-    public void testValidateParameters_ValidParameters() {
-        // Define valid parameters
-        String sortType = "name";
-        String sortOrder = "asc";
-        int limit = 5;
-        int offset = 0;
+    @ParameterizedTest(name = "Test: Sort Type: {0}, Sort Order: {1}, Limit: {2}, Offset: {3}")
+    @CsvSource(value = {
+            "age,even,5,0,src/test/java/resources/sort_type_age_order_even/test_users_input.json,src/test/java/resources/sort_type_age_order_even/test_users_output.json",
+            "age,odd,5,0,src/test/java/resources/sort_type_age_order_even/test_users_input.json,src/test/java/resources/sort_type_age_sort_order_odd/test_users_output.json",
+            "name,even,5,0,src/test/java/resources/sort_type_age_order_even/test_users_input.json,src/test/java/resources/sort_type_name_order_even/test_users_output.json",
+            "name,odd,5,0,src/test/java/resources/sort_type_age_order_even/test_users_input.json,src/test/java/resources/sort_type_name_order_odd/test_users_output.json",
+    }, delimiter = ',')
+    public void itShouldReturnListOfUsersBasedOnTheInputParameters(String sortType, String sortOrder, int limit, int offset, String inputFilePath, String expectedFilePath) throws IOException {
+        // GIVEN
+        List<User> randomListOfUsers = objectMapper.readValue(new File(inputFilePath), new TypeReference<>() {
+        });
+        List<User> sortedListOfUsers = objectMapper.readValue(new File(expectedFilePath), new TypeReference<>() {
+        });
+        when(userRepository.findAll(any(Pageable.class))).thenReturn(page);
+        when(page.toList()).thenReturn(randomListOfUsers);
 
-        // Call the method
-        userService.validateParameters(sortType, sortOrder, limit, offset);
+        // WHEN
+        UsersGetResponse usersList = userService.getUsers(new UserGetQuery(sortType, sortOrder, limit, offset));
 
-        // No exception should be thrown for valid parameters
+        // THEN
+        assertEquals(5, usersList.getUsersList().size());
+        assertEquals(sortedListOfUsers, usersList.getUsersList());
     }
-	
-	
-	
 }
+
